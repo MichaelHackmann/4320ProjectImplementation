@@ -1,0 +1,469 @@
+<!-- views/index.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../public/style.css">
+  <title>iClothing</title>
+  <script src="https://kit.fontawesome.com/b24fcb5f38.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <div class="overlay" id="overlay">
+        <div class="login-box">
+            <h2>Login</h2>
+            <form action="#">
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username">
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password">
+                </div>
+                <div id="loginError" class="error-message">
+                    <div class="error-container">
+                        <p>Incorrect username or password. Please try again.</p>
+                    </div>
+                </div>
+                <button onclick="login(event)">Login</button>
+            </form>
+            <!-- <button class="close-btn" onclick="closeOverlay()">Close</button> -->
+        </div>
+    </div>
+    
+    <!-- <button class="open-btn" onclick="openOverlay()">Open Login</button> -->
+
+    <!-- <h1>iClothing</h1> -->
+
+    <nav class="navbar">
+        <div class="logo">
+            <a href="#">iClothing</a>
+        </div>
+        <div class="navbar-links-container">
+            <div class="home">
+                <a href="#" onclick="renderHome()">Home</a>
+            </div>
+            <div class="about">
+                <a href="#" onclick="renderAboutUs()">About Us</a>
+            </div>
+            <div class="products">
+                <a href="#">Products</a>
+            </div>
+    
+            <div class="cart">
+                <a href="#" onclick="renderCart()">
+                    <!-- <i class="fa-solid fa-shopping-cart"></i> -->
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span id="cartQuantity" class="cart-badge"><%= productsInCart ? productsInCart.length : 0 %></span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <div id="productsContainer" class="product-container">
+            <h1>Products</h1>
+            <div class="card-container">
+                <!-- <div class="grid-container"> -->
+                <!-- <div > -->
+                <% if (products) { %>
+                    <% products.forEach((product) => { %>
+                        <!-- <div id="<%= product.productID %>">
+                            <p class="inline-block content"><%= product.productName %></p>
+                            <button onclick="addToCart([`ADD_TO_CART`, this.parentElement.id])">Add to cart</button>
+                        </div> -->
+
+                        <div class="product-card">
+                            <img src="adidas-shorts.jpg" alt="<%= product.productName %>">
+                            <div class="product-details" id="<%= product.productID %>">
+                                <h2 class="product-name content"><%= product.productName %></h2>
+                                <p class="product-description"><%= product.productDescription %></p>
+                                <p class="product-price">$<%= product.productPrice.toFixed(2) %></p>
+                                <p class="product-quantity">Available: <%= product.productQty %></p>
+                                <p class="product-category">Department: <%= product.department %></p>
+                                <p class="product-category">Category: <%= product.category %></p>
+                                <p class="product-brand">Brand: <%= product.brand %></p>
+                                <button class="add-to-cart-btn" onclick="addToCart([`ADD_TO_CART`, this.parentElement.id])">Add to cart</button>
+                            </div>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <p>No products in the database</p>
+                <% } %>
+    
+            </div>
+        </div>
+
+        <div class="cart-container" id="cartContainer">
+            <h1>Cart</h1>
+            <div class="container">
+                <h1>Shopping Cart</h1>
+                <div id="cartItems" class="cart-items">
+                    <% if(productsInCart) { %>
+                    <% productsInCart.forEach(item => { %>
+                        <div id="<%= item.productID %>_CART" class="cart-item">
+                            <img src="product_image_placeholder.jpg" alt="<%= item.productName %>">
+                            <div class="item-details">
+                                <h3><%= item.productName %></h3>
+                                <p>Price: $<%= item.productPrice.toFixed(2) %></p>
+                                <p>Quantity: <%= item.quantity %></p>
+                                <!-- <p>Total: $<%= (item.productPrice * item.quantity).toFixed(2) %></p> -->
+                            </div>
+                            <button onclick="removeFromCart(['REMOVE_FROM_CART', this.parentElement.id])">Remove</button>
+                        </div>
+                    <% }); %>
+                    <% } else { %>
+                        <div class="cart-item">
+                            No items in cart
+                        </div>
+                    <% } %>
+
+                </div>
+                <div class="total">
+                    <% if(productsInCart) { %>
+                    <h3>Total: $<%= productsInCart.reduce((total, item) => total + item.productPrice, 0).toFixed(2) %></h3>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+        <div class="about-us-container" id="aboutUsContainer">
+            <!-- <h1>About Us</h1> -->
+            <!-- <div class="container">
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Saepe officia voluptas minus consequuntur natus quis nostrum eos corrupti dolores, laudantium consequatur soluta veniam unde odit molestiae qui temporibus fugiat numquam minima quia sapiente. Cum reprehenderit aliquid minima deserunt praesentium saepe, assumenda pariatur fugit, rerum in ipsum possimus facere repellendus magnam dolores unde impedit aliquam vero distinctio eveniet? Aperiam deleniti numquam nihil provident eaque eum. Et veniam est aperiam sequi fugit facere adipisci eum ipsum animi distinctio, facilis quasi voluptates laborum porro. Nam quisquam molestias ipsum iusto eos possimus repellat repudiandae. Repudiandae accusantium harum deserunt molestiae maxime neque nostrum dolorem accusamus?</p>
+            </div> -->
+            <div class="container">
+                <h1>About Us</h1>
+        
+                <div class="section">
+                    <div class="section-heading">Our Mission</div>
+                    <div class="section-content">
+                        <p>iClothing is dedicated to providing trendy and affordable clothing for men, women, and kids. We strive to offer a wide selection of high-quality apparel while ensuring comfort and style.</p>
+                    </div>
+                </div>
+        
+                <div class="section">
+                    <div class="section-heading">Our Address</div>
+                    <div class="section-content">
+                        <p>123 Main Street<br>
+                        Columbia, MO 65201</p>
+                    </div>
+                </div>
+        
+                <div class="section">
+                    <div class="section-heading">Shipping Policy</div>
+                    <div class="section-content">
+                        <p>We offer free standard shipping on orders over $50 within the contiguous United States. Expedited shipping options are also available.</p>
+                    </div>
+                </div>
+        
+                <div class="section">
+                    <div class="section-heading">Return Policy</div>
+                    <div class="section-content">
+                        <p>We accept returns within 30 days of purchase. Items must be unworn, unwashed, and in their original condition with tags attached.</p>
+                    </div>
+                </div>
+        
+                <div class="section">
+                    <div class="section-heading">Contact Information</div>
+                    <div class="section-content">
+                        <p>Phone: (123) 456-7890<br>
+                        Email: info@iclothing.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+    
+
+    
+
+
+    <script>
+        function calculateTotal(cartItems) {
+            return cartItems.reduce((total, item) => total + item.productPrice, 0);
+        }
+
+
+        async function renderAboutUs() {
+            document.getElementById("productsContainer").style.display = "none";
+            document.getElementById("aboutUsContainer").style.display = "block";
+            document.getElementById("cartContainer").style.display = "none";
+
+        }
+
+        async function renderHome() {
+            document.getElementById("productsContainer").style.display = "block";
+            document.getElementById("aboutUsContainer").style.display = "none";
+            document.getElementById("cartContainer").style.display = "none";
+
+        }
+        async function renderCart() {
+            document.getElementById("productsContainer").style.display = "none";
+            document.getElementById("aboutUsContainer").style.display = "none";
+            document.getElementById("cartContainer").style.display = "block";
+
+            let destination = document.getElementById("cartItems");
+
+            let products = await getAllProductsInCart();
+
+            let totalDestHtml = "";
+            products.forEach(item => {
+                // destination.innerHTML += 
+                let destHtml = 
+                `<div class="cart-item">
+                    <img src="product_image_placeholder.jpg" alt="${item.productName}">
+                    <div id="${item.productID}_CART" class="item-details">
+                        <h3>${item.productName}</h3>
+                        <p>Price: $${item.productPrice.toFixed(2)} %></p>
+                        <p>Quantity: ${item.quantity}</p>
+                        <!-- <p>Total: $${ (item.productPrice * item.quantity).toFixed(2) }</p> -->
+                    </div>
+                    <button onclick="removeFromCart(['REMOVE_FROM_CART', this.parentElement.id])">Remove</button>
+
+                </div>`
+
+                totalDestHtml += destHtml;
+            })
+
+            destination.innerHTML = totalDestHtml;
+
+
+
+        }
+
+
+        async function login(e) {
+            e.preventDefault();
+            let username = document.getElementById('username').value;
+            let password = document.getElementById('password').value;
+
+            let customers = await getAllCustomers();
+            console.log("The customers: ", customers);
+
+            let admins = await getAllAdmins();
+            console.log("The admins: ", admins);
+
+            
+            let customerBool = false;
+            let customerMatch = customers.find(obj => obj.customerID === username);
+            if(customerMatch) {
+                if(customerMatch.password === password) customerBool = true;
+            }
+
+            let adminBool = false;
+            let adminMatch = admins.find(obj => obj.adminID === username);
+            if(adminMatch) {
+                if(adminMatch.password === password) adminBool = true;
+            }
+
+            if(!customerBool && !adminBool) {
+                console.log("No match") 
+                document.getElementById("loginError").style.display = "block";
+            } else {
+                closeLogin();
+            }
+            
+
+        }
+
+        async function getAllCustomers() {
+            try {
+                const response = await fetch('/getAllCustomers', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                const data = await response.json();
+                console.log('Data retrieved successfully:', data);
+                return data;
+            } catch (error) {
+                console.error('Error getting data:', error);
+                throw error; // Rethrow the error to propagate it
+            }
+        }
+
+        async function getAllAdmins() {
+            try {
+                const response = await fetch('/getAllAdmins', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                const data = await response.json();
+                console.log('Data retrieved successfully:', data);
+                return data;
+            } catch (error) {
+                console.error('Error getting data:', error);
+                throw error; // Rethrow the error to propagate it
+            }
+        }
+
+        async function getItAll() {
+            try {
+                const response = await fetch('/getItAll', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                const data = await response.json();
+                
+                console.log('Data retrieved successfully:', data);
+                return data;
+            } catch (error) {
+                console.error('Error getting data:', error);
+                throw error; // Rethrow the error to propagate it
+            }
+        }
+
+        async function getAllProductsInCart() {
+            try {
+                const response = await fetch('/getAllProductsInCart', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                const data = await response.json();
+                
+                console.log('Data retrieved successfully:', data);
+                return data;
+            } catch (error) {
+                console.error('Error getting data:', error);
+                throw error; // Rethrow the error to propagate it
+            }
+        }
+
+        function openLogin() {
+            document.getElementById("overlay").style.display = "block";
+        }
+
+        function closeLogin() {
+            document.getElementById("overlay").style.display = "none";
+        }
+
+        function removeFromCart(data) {
+            
+            let container = document.getElementById(data[1]).parentElement.parentElement;
+
+            document.getElementById(data[1]).parentElement.remove();
+
+            console.log(container);
+            if(container.innerHTML.trim() === "") { // if all the elements have been removed, put in a list element saying it's empty
+                container.innerHTML = "<li>Cart empty</li>"
+            }
+
+            console.log(document.getElementById("cartQuantity").innerText--);
+
+
+            var inputData = data;
+            inputData[1] = inputData[1].substring(0,7);
+
+            fetch('/removeFromCart', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ inputData: inputData }),
+            })
+            .then(response => {
+                console.log(response);
+                return response.json();
+
+            })
+            .then(data => {
+                console.log('Data sent successfully:', data);
+            })
+            .catch(error => {
+                console.error('Error sending data:', error);
+            });
+        }
+
+        async function addToCart(data) {
+            // let container = document.getElementById(data[1]).parentElement.parentElement;
+
+            let container = document.getElementById(data[1]);
+            let content = container.querySelector('.content').innerHTML;
+            let contentID = data[1];
+            console.log(content);
+
+            // let destination;
+
+            // switch(data[0]) {
+            //     case "ADD_TO_CART":
+            //         destination = document.getElementById("CART");
+            //         break;
+                
+            // }
+
+            // console.log(destination)
+
+            // let destinationHTML = `<div><li id="${contentID}_INCART">
+            //                               ${content}
+            //                               <button onclick="removeFromCart(['REMOVE_FROM_CART', this.parentElement.id])">Remove from cart</button>
+            //                           </li></div>`
+
+            let cartProducts = await getAllProductsInCart();
+
+            console.log(cartProducts);
+
+            let alreadyThere = false;
+                if(cartProducts !== undefined) {
+                cartProducts.forEach(prod => {
+                    if(prod.productID === contentID) alreadyThere = true;
+                })
+            }
+
+
+            if(!alreadyThere) { // if the content isn't already there, go through the favoriting process
+                // if(destination.innerHTML.trim() === "<li>Cart empty</li>") { // if the destination is empty of content and only has the empty message, replace it with the new content
+                //     destination.innerHTML = destinationHTML;
+                // } else destination.innerHTML += destinationHTML; // otherwise append the new content on top of the old 
+
+                inputData = data;
+
+                fetch('/addToCart', {
+                    method: 'POST',
+                    headers: {
+                    'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ inputData: inputData }),
+                })
+                .then(response => {
+                    console.log(response);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Data sent successfully:', data);
+                })
+                .catch(error => {
+                    console.error('Error sending data:', error);
+                });
+
+                console.log(document.getElementById("cartQuantity").innerText++);
+
+                
+
+            } else {
+                alert(`"${content}" is already in your cart`);
+                return; // if it's there already, do nothing
+            } 
+        }
+
+
+    </script>
+
+
+
+
+
+</body>
+</html>

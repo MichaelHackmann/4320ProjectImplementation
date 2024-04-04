@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <a href="/artists">Artists</a>
+</body>
+</html>
+
+
+<ul>
+    <% if(playlistSongs[i] != '') { %>
+        <% playlistSongs[i].forEach(song => { %>
+            <li><%= song.Song_title %> | <%= song.Album_title %> | <%= song.Artist_name%></li>
+        <% }) %>
+    <% } else { %>
+        <li>This playlist is empty</li>
+    <% } %>
+</ul>
+
+
+
+// console.log(playlistSongsContainer)
+                let test = "." + songID;
+                // console.log(test)
+                // console.log(test)
+                console.log("test: " + test)
+                let songThere = playlistSongsContainer.querySelector(test);
+                console.log(songThere)
+                // console.log(songThere)
+
+                if(songThere === null) {
+                    console.log("the song is not in that playlist yet");
+
+                    playlistSongsContainer.innerHTML += `<li class="${songID}">${songName}</li>`;
+                } else alert("Song is already in that playlist");
+                // let songNotThere = playlistSongsContainer.getElementById(songID);
+                // console.log(songNotThere)
+
+
+
+
+
+
+
+                <h2>Products in cart</h2>
+        
+        
+            <div class="grid-container">
+                <div>
+                    <h3>Products in cart</h3>
+                    <ul id="CART">
+                        <% if(productsInCart) { %>
+                            <% productsInCart.forEach(product => { %>
+                                <div>
+                                    <li class="INCART" id="<%= product.productID %>_INCART">
+                                        <%=  product.productName %>
+                                        <!-- <%= products.find(obj => obj.productId === product.productId).productName %> -->
+                                        <button onclick="removeFromCart([`REMOVE_FROM_CART`, this.parentElement.id])">Remove from cart</button>
+                                    </li>
+                                </div>
+                            <% }) %>
+                        <% } else { %>
+                            <li>Cart empty</li>
+                        <% } %>
+                    </ul>
+                </div>        
+            </div>
