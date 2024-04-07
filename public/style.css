@@ -55,7 +55,7 @@ button {
 }
 
 button.close-btn {
-    background-color: #dc3545;
+
     margin-top: 10px;
 }
 
@@ -155,7 +155,6 @@ button.open-btn {
     text-decoration: none;
     cursor: pointer;
 }
-
 .product-card {
     display: flex;
     flex-direction: column;
@@ -167,7 +166,12 @@ button.open-btn {
 }
 
 .product-card img {
-    width: 100%;
+    width: auto;
+    height: 300px;
+    max-width: 100%;
+    object-fit: contain;
+    margin: 0 auto; /* Center the image horizontally */
+    display: block; /* Remove any space below the image */
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
@@ -243,6 +247,7 @@ button.open-btn {
 
 
 .about-us-container {
+    display: none;
     width: 1300px;
 }
 .about-us-container h1 {
@@ -282,6 +287,10 @@ p {
     color: #666;
 }
 
+.cart-container {
+    display: none;
+}
+
 .cart-container .container {
     max-width: 800px;
     margin: 0 auto;
@@ -316,3 +325,79 @@ p {
     margin-top: 20px;
     text-align: right;
 }
+
+.contact-us-container {
+    display: none;
+}
+.contact-us-container .container {
+    /* display: none; */
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  h1 {
+    color: #333;
+    text-align: center;
+  }
+  .contact-info {
+    margin-top: 30px;
+    text-align: center;
+  }
+  .contact-info p {
+    margin: 10px 0;
+  }
+  .contact-info p span {
+    font-weight: bold;
+    color: #333;
+  }
+  .contact-info a {
+    text-decoration: none;
+    color: #007bff;
+    transition: color 0.3s;
+  }
+  .contact-info a:hover {
+    color: #0056b3;
+  }
+  .message-form {
+    margin-top: 30px;
+    text-align: center;
+  }
+  .message-form input[type="text"],
+  .message-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    box-sizing: border-box;
+  }
+  .message-form textarea {
+    height: 150px;
+  }
+  .message-form input[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  .message-form input[type="submit"]:hover {
+    background-color: #0056b3;
+  }
+
+  .user {
+    height: 35px;
+    display: flex;
+    align-items: center;
+    border-radius: 10px;
+    justify-content: center;
+    color: #007bff;
+    background-color: white;
+    margin-left: 10px;
+  }
+  .user a {
+    color: #007bff;
+    /* background-color: white; */
+  }
