@@ -74,6 +74,9 @@ router.get('/refresh', (req, res) => {
 })
 
 
+
+
+
 router.post('/removeFromCart', async (req, res) => {
     let conn = connectionrequest();
 
@@ -103,6 +106,70 @@ router.post('/removeFromCart', async (req, res) => {
     });
 
 
+})
+router.post('/clearCart', async (req, res) => {
+    let conn = connectionrequest();
+
+    const inputData = req.body.inputData;
+
+    let cartID = inputData[0];
+    let query;
+
+    query = `DELETE FROM ShoppingCartProduct WHERE cartID = ${cartID}`;
+
+    let clearCartPromise = mysqlQueryRunner(conn, query);
+    clearCartPromise.then(result => console.log(`CLEAR_CART SUCCESS: products with cartID "${inputData[0]}" succesfully removed from cart`))
+    .catch(err => console.log(err))
+
+    conn.end((err) => {
+        if (err) {
+            console.error('Error closing the database connection:', err.stack);
+            return;
+        }
+        console.log('Database connection closed');
+    });
+
+
+})
+router.post('/logoutCustomer', async (req, res) => {
+    let conn = connectionrequest();
+
+
+    let query;
+
+    query = `UPDATE LoggedInCustomer SET loggedIn = false WHERE customerID = "CUST001";`;
+
+    let logoutPromise = mysqlQueryRunner(conn, query);
+    logoutPromise.then(result => console.log(`LOGOUT SUCCESS: customer logged out`))
+    .catch(err => console.log(err))
+
+    conn.end((err) => {
+        if (err) {
+            console.error('Error closing the database connection:', err.stack);
+            return;
+        }
+        console.log('Database connection closed');
+    });
+})
+router.post('/loginCustomer', async (req, res) => {
+    let conn = connectionrequest();
+
+
+    let query;
+
+    query = `UPDATE LoggedInCustomer SET loggedIn = true WHERE customerID = "CUST001";`;
+
+    let loginPromise = mysqlQueryRunner(conn, query);
+    loginPromise.then(result => console.log(`LOGIN SUCCESS: customer logged`))
+    .catch(err => console.log(err))
+
+    conn.end((err) => {
+        if (err) {
+            console.error('Error closing the database connection:', err.stack);
+            return;
+        }
+        console.log('Database connection closed');
+    });
 })
 
 router.post('/addToCart', async (req, res) => {

@@ -15,10 +15,12 @@ async function getNewPageData() {
     let brandsPromise = getBrands(conn);
     let departmentsPromise = getDepartments(conn);
     let categoriesPromise = getCategories(conn);
+    let loggedInCustomerPromise = getLoggedInCustomer(conn);
+
     
 
 
-    return Promise.all([productsPromise, adminPromise, customerPromise, shoppingCartPromise, shoppingCartProductsPromise, brandsPromise, departmentsPromise, categoriesPromise])
+    return Promise.all([productsPromise, adminPromise, customerPromise, shoppingCartPromise, shoppingCartProductsPromise, brandsPromise, departmentsPromise, categoriesPromise, loggedInCustomerPromise])
     .then(results => {
 
         let products;
@@ -45,6 +47,8 @@ async function getNewPageData() {
         let categories;
         results[7] == "" ? categories = null : categories = results[7];
 
+        let loggedInCustomer = results[8];
+
 
         if(productsInCart !== null) {
             for(let i = 0; i < productsInCart.length; i++) {
@@ -62,7 +66,7 @@ async function getNewPageData() {
             console.log('Database connection closed');
         });
 
-        return { products, admins, customers, shoppingCarts, productsInCart, brands, departments, categories };
+        return { products, admins, customers, shoppingCarts, productsInCart, brands, departments, categories, loggedInCustomer };
     });
 }
 
@@ -143,6 +147,16 @@ async function getCategories(conn) {
 async function getShoppingCartProducts(conn) {
 
     const query = 'SELECT * FROM SHOPPINGCARTPRODUCT WHERE cartId = 1';
+
+    return conn.promise().query(query)
+        .then( ([rows,fields]) => {
+        
+            return rows;
+            })
+};
+async function getLoggedInCustomer(conn) {
+
+    const query = 'SELECT loggedIn FROM LoggedInCustomer WHERE customerID = "CUST001";';
 
     return conn.promise().query(query)
         .then( ([rows,fields]) => {

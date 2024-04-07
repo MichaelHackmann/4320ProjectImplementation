@@ -36,8 +36,6 @@
             <!-- <button class="close-btn" onclick="closeOverlay()">Close</button> -->
         </div>
     </div>
-
-    <a href="admin">Go to admin page</a>
     
     <!-- <button class="open-btn" onclick="openOverlay()">Open Login</button> -->
 
@@ -73,13 +71,25 @@
                 </a>
             </div>
 
-            <div class="user">
-                <a href="#" onclick="openLogin()">
-                    <!-- <i class="fa-solid fa-shopping-cart"></i> -->
-                    <p>Login <i class="fa-solid fa-right-to-bracket"></i></p>
-                    <!-- <span id="cartQuantity" class="cart-badge"><%= productsInCart ? productsInCart.length : 0 %></span> -->
-                </a>
-            </div>
+
+            <% if(loggedInCustomer[0].loggedIn === 1) { %>
+                <div class="user">
+                    <a onclick="logoutCustomer()">
+                        <!-- <i class="fa-solid fa-shopping-cart"></i> -->
+                        <p>Logout <i class="fa-solid fa-right-from-bracket"></i></p>
+                        <!-- <span id="cartQuantity" class="cart-badge"><%= productsInCart ? productsInCart.length : 0 %></span> -->
+                    </a>
+                </div>
+            <% } else { %>
+                <div class="user">
+                    <a href="#" onclick="openLogin()">
+                        <!-- <i class="fa-solid fa-shopping-cart"></i> -->
+                        <p>Login <i class="fa-solid fa-right-to-bracket"></i></p>
+                        <!-- <span id="cartQuantity" class="cart-badge"><%= productsInCart ? productsInCart.length : 0 %></span> -->
+                    </a>
+                </div>
+            <% } %>
+            
         </div>
     </nav>
 
@@ -167,7 +177,7 @@
                     <input type="text" name="name" placeholder="Your Name" required>
                     <input type="email" name="email" placeholder="Your Email" required>
                     <textarea name="message" placeholder="Your Message" required></textarea>
-                    <input type="submit" value="Send Message">
+                    <input type="button" onclick="sendMessage()" value="Send Message">
                   </form>
                 </div>
               </div>
@@ -176,7 +186,7 @@
         <div class="place-order-container" id="placeOrderContainer">
             <div class="container">
                 <h1>Order Details</h1>
-                <form action="/place-order" method="post">
+                <form action="/place-order" method="post" id="<%= shoppingCarts[0].cartID %>">
                     <label for="billing-name">Billing Name</label>
                     <input type="text" id="billing-name" name="billing-name" required>
                     
@@ -202,7 +212,7 @@
                     </div>
                     
                     <h3>Order Total: $<span id="placeOrderTotal"></span></h3>
-                    <input type="submit" value="Place Order">
+                    <input type="button" onclick="placeOrder(this.parentElement.id)" value="Place Order">
                 </form>
             </div>
         </div>
@@ -249,11 +259,91 @@
                 </div>
             </div>
         </div>
+
+        <div id="orderConfirmationContainer" class="order-confirmation-container">
+            <div class="container">
+                <h1>Thank You For Your Order!</h1>
+            
+                <p>Your order has been successfully placed.</p>
+                
+                <p class="confirmation-number">Order Confirmation Number: #123456789</p>
+                
+                <p>We will email you with updates on the status of your order.</p>
+                
+                <a href="/" class="back-to-home">Back to Home</a>
+            </div>
+        </div>
         
     </div>
-    
 
     <script>
+        function logoutCustomer() {
+            var inputData = ["LOGOUT"]; // Example data format
+            fetch('/customer/logoutCustomer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ inputData: inputData }),
+            })
+            .then(response => {
+                // Handle response
+            })
+            .catch(error => {
+                // Handle error
+            });
+
+            window.location.href = '/customer';
+        }
+        function loginCustomer() {
+            var inputData = ["LOGIN"]; // Example data format
+            fetch('/customer/loginCustomer', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ inputData: inputData }),
+            })
+            .then(response => {
+                // Handle response
+            })
+            .catch(error => {
+                // Handle error
+            });
+
+        }
+
+        function sendMessage() {
+            alert("Thank you for your input. We appreciate it and will get back to you as soon as we can! ")
+        }
+
+        
+
+        function placeOrder(cartID) {
+            let bName = document.getElementById('billing-name').value;
+            let bAdd = document.getElementById('billing-address').value;
+            let email = document.getElementById('email').value;
+            let phone = document.getElementById('phone').value;
+            let shipAdd = document.getElementById('shipping-address').value;
+            let ccn = document.getElementById('card-number').value;
+            let month = document.getElementById('expiry-month').value;
+            let year = document.getElementById('expiry-year').value;
+            let cvv = document.getElementById('cvv').value;
+
+            if (!bName || !bAdd || !email || !phone || !shipAdd || !ccn || !month || !year || !cvv) {
+                alert("Please fill out all fields.");
+                return;
+            }
+
+            clearCart(cartID);
+
+            renderOrderConfirmation();
+
+            document.getElementById('cartQuantity').innerHTML = 0;
+
+
+
+        }
         function calculateTotal(cartItems) {
             return cartItems.reduce((total, item) => total + item.productPrice, 0);
         }
@@ -271,6 +361,16 @@
             document.getElementById("cartContainer").style.display = "none";
             document.getElementById("contactUsContainer").style.display = "none";
             document.getElementById("placeOrderContainer").style.display = "none";
+            document.getElementById("orderConfirmationContainer").style.display = "none";
+
+        }
+        async function renderOrderConfirmation() {
+            document.getElementById("productsContainer").style.display = "none";
+            document.getElementById("aboutUsContainer").style.display = "none";
+            document.getElementById("cartContainer").style.display = "none";
+            document.getElementById("contactUsContainer").style.display = "none";
+            document.getElementById("placeOrderContainer").style.display = "none";
+            document.getElementById("orderConfirmationContainer").style.display = "block";
 
         }
 
@@ -288,6 +388,8 @@
             document.getElementById("cartContainer").style.display = "none";
             document.getElementById("contactUsContainer").style.display = "none";
             document.getElementById("placeOrderContainer").style.display = "block";
+            document.getElementById("orderConfirmationContainer").style.display = "none";
+
         }
 
         async function renderContactUs() {
@@ -296,6 +398,8 @@
             document.getElementById("cartContainer").style.display = "none";
             document.getElementById("contactUsContainer").style.display = "block";
             document.getElementById("placeOrderContainer").style.display = "none";
+            document.getElementById("orderConfirmationContainer").style.display = "none";
+
 
         }
 
@@ -305,6 +409,8 @@
             document.getElementById("cartContainer").style.display = "block";
             document.getElementById("contactUsContainer").style.display = "none";
             document.getElementById("placeOrderContainer").style.display = "none";
+            document.getElementById("orderConfirmationContainer").style.display = "none";
+
 
 
 
@@ -357,13 +463,13 @@
                     `<div class="cart-item empty-cart-item">
                         No items in cart
                     </div>
-
-
-                    <div class="total">
-                        <h3>Total: $0.00</h3>
-                    </div>`;
+                    `;
 
                     destination.innerHTML = totalDestHtml;
+
+                    document.getElementById('totalContainer').innerHTML = `<h3>Total: $<span id="totalPrice">0.00</span></h3>
+                    <button onclick="renderPlaceOrder()">Place Order</button>`
+
 
             }
 
@@ -419,6 +525,22 @@
                 // Handle error
             });
         }
+        function clearCart(cartID) {
+            var inputData = [cartID]; // Example data format
+            fetch('/customer/clearCart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ inputData: inputData }),
+            })
+            .then(response => {
+                // Handle response
+            })
+            .catch(error => {
+                // Handle error
+            });
+        }
 
 
         async function login(e) {
@@ -451,6 +573,7 @@
             } else {
 
                 if(adminBool) {
+
                     // fetch('admin/loginAdmin', {
                     //     method: 'POST',
                     //     headers: {
@@ -491,6 +614,8 @@
                     //     // console.error('Error sending data:', error);
                     // });
 
+                    loginCustomer();
+
                     window.location.href = '/customer';
                 }
 
@@ -517,6 +642,7 @@
                 throw error; // Rethrow the error to propagate it
             }
         }
+ 
 
         async function getAllAdmins() {
             try {
@@ -678,7 +804,8 @@
 
                 incrementCartQuantity(contentID);
                 // updateCartQuantity(contentID, document.getElementById(contentID+"_CART_QTY").value);
-                alert(`"ONe more ${content}" added to ur cart`);
+                alert(`"${content}" added to cart`);
+
                 return; // if it's there already, do nothing
             } 
 
